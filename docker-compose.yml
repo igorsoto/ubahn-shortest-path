@@ -1,0 +1,12 @@
+version: '3.5'
+
+services:
+    mongodb:
+        image: mvertes/alpine-mongodb
+        ports:
+            - 27017:27017
+    ubahn_api:
+        build: ./
+        ports:
+            - 3000:3000
+    
