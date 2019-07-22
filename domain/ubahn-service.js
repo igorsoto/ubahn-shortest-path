@@ -1,10 +1,14 @@
-const map = require('../map.json');
 const BFS = require('../algorithms/bfs');
 const Graph = require('../data-structures/graph');
 const Edge = require('../data-structures/edge');
 
 module.exports = class UBahnService {
-    constructor(ubahnMap = map) {
+    constructor(repository) {
+        this.repository = repository;
+    }
+
+    async loadGraph() {
+        const ubahnMap = (await this.repository.list())[0].map;
         const indexes = new Map();
         const names = new Map();
         let i = 0;

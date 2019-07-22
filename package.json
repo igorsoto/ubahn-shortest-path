@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "seed": "node ./seed/index.js",
+    "api": "node ./index.js",
+    "start": "npm run seed && npm run api",
     "test": "mocha"
   },
   "author": "",
@@ -16,7 +19,8 @@
     "@hapi/inert": "^5.2.1",
     "@hapi/joi": "^15.1.0",
     "@hapi/vision": "^5.5.2",
+    "dotenv": "^8.0.0",
     "hapi-swagger": "^10.0.2",
-    "mongo": "^0.1.0"
+    "mongodb": "^3.3.0-beta2"
   }
 }

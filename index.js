@@ -4,14 +4,18 @@ const Vision = require('@hapi/vision');
 const HapiSwagger = require('hapi-swagger');
 const Joi = require('@hapi/joi');
 const UBahnService = require('./domain/ubahn-service');
+const StationsRepository = require('./domain/stations-repository');
+const config = require('./config');
 
-const ubahnService = new UBahnService();
+const stationsRepository = new StationsRepository();
+const ubahnService = new UBahnService(stationsRepository);
 
 const init = async () => {
+  await ubahnService.loadGraph();
 
   const server = Hapi.server({
-      port: 3000,
-      host: 'localhost'
+      port: config.port,
+      host: '0.0.0.0'
   });
 
   const swaggerOptions = {
@@ -30,7 +34,6 @@ const init = async () => {
     }
   ]);
 
-
   server.route({
     method: 'GET',
     path: '/munich/ubahn/from/{from}/to/{to}',
@@ -38,12 +41,17 @@ const init = async () => {
       handler: (request, h) => {
         const { from, to } = request.params;
         const path = ubahnService.shortestPath(from, to);
-        return h.response({
-          shortestPath: path
-        });
+        return h.response({ shortestPath: path });
       },
       description: 'GET shortest path between two stations',
-      tags: ['api'], // ADD THIS TAG
+      tags: ['api'],
+      response: {
+        status: {
+            200: Joi.object().keys({
+              shortestPath: Joi.array().items(Joi.string())
+            }).label("ShortestPathResponseContract")
+        }
+      },
       validate: {
         params: {
           from: Joi.string().allow(ubahnService.listStations()).required().description('Name of the origin station'),
@@ -59,7 +67,6 @@ const init = async () => {
 };
 
 process.on('unhandledRejection', (err) => {
-
     console.log(err);
     process.exit(1);
 });

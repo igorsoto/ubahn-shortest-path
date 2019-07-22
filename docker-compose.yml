@@ -1,12 +1,16 @@
 version: '3.5'
 
 services:
-    mongodb:
-        image: mvertes/alpine-mongodb
+    mongo:
+        image: mongo
         ports:
-            - 27017:27017
+            - "27017:27017"
+        restart: always
     ubahn_api:
         build: ./
         ports:
-            - 3000:3000
+            - "3000:3000"
+        restart: always
+        depends_on:
+            - mongo
     

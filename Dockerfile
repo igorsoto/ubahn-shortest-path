@@ -6,4 +6,6 @@ COPY package.json .
 RUN npm install
 
 COPY . .
-CMD ["node", "index"]
+
+EXPOSE 3000
+CMD ["npm", "run", "start"]

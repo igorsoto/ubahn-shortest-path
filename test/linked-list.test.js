@@ -52,12 +52,6 @@ describe('LinkedList', () => {
         assert(list.count == 0);
     });
     
-    it('should throw exception when list is empty', () => {
-        const list = new LinkedList();
-        assert.throws(() => list.removeFirst(), { message: 'List is empty.' });
-        assert.throws(() => list.removeLast(), { message: 'List is empty.' });
-    });
-    
     it('should clear list', () => {
         const list = new LinkedList();
         list.addLast(5);
